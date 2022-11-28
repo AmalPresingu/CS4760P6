@@ -1,0 +1,30 @@
+Author  : Amal Presingu
+Date    : 11/27/2022
+CS4760  : Project 6
+
+HOW TO RUN
+----------
+1. Run the make command
+2. Run oss executable: ./oss -h for usage
+3. Inspect log files for results
+4. Run make clean
+
+COMMANDS 
+-------------------
+./oss 				Forks user process randomly between 1 and 5 seconds
+./oss -h			Prints usage
+./oss -v [0 | 1]	0 for non-verbose mode | 1 for verbose mode		
+
+
+Version Control
+---------------
+The .git subdirectory can be found by running ls -la in the directory.
+GitHub Repo: https://github.com/AmalPresingu/CS4760P6
+
+ISSUES/CHANGES
+--------------
+- Currently runs with 20 max processes instead of 40. Was getting a "resource temporarily unavailable"
+  message when trying to create new processes. Should be working accordingly though. When I ran ulimit, my 
+  max user processes was set to 30. Not sure if this has anything to do with the issue. 
+  
+- Added -v parameter to toggle verbose on and off.
