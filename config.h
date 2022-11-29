@@ -1,21 +1,35 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <signal.h>
+#include <unistd.h>
+#include <time.h>
+#include <sys/shm.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#include <sys/msg.h>
 #include <limits.h>
 
-#define MAX_PROCESSES 40
-#define HELP_STATEMENT "HELP\n"
+#define MAX_PROCESSES 20
+#define HELP_STATEMENT "HOW TO USE: [-h -m -p]\n -h for help \n -m\t0 for 1st memory request scheme \n\t1 for 2nd memory request scheme\n-p\tSet the number of processes you want to run\n"
 #define MAX_PROCESS_IN_SYSTEM 18
-#define MAX_LINE_IN_LOG_FILE 10000
+#define MAX_LINE_IN_LOG_FILE 40000
 #define TERMINATION_PROB 0.30
 #define MAX_NANO_SEC 1000000000
 #define NANO_NANO_SEC_PER_MILLISEC MAX_NANO_SEC/1000
-
+#define MEM_ALLOCATION_TIME 10 // in nanosec
+#define PAGE_FAULT_RUNTIME 14000000 // in nanosec
 #define MAX_PAGES 32
-#define MAX_MEM 250
+#define MAX_MEM 256
 #define logSize 100000
 
-const int DEFAULT_SS = 5;
+const int DEFAULT_SS = 10;
 const int MAX_PROCESS_GEN_SEC = 0;
 const int MAX_PROCESS_GEN_MSEC =500;
 const int MAX_PROCESS_TERMINATION_MSEC = 250;
@@ -27,6 +41,8 @@ const int MAX_CLOCK_INC_NSEC = 1000;
 enum request_state {request,release,none};
 enum recvType {WAIT,NOWAIT};
 enum mem_state {USED,FREE};
+enum req_type {READ,WRITE,TERMINATE};
+enum pnp {PRESENT,NOTPRESENT};
 
 struct sembuf semLock, semRelease;
 
@@ -37,8 +53,11 @@ struct lclock{
 
 struct request_packet{
     int packet_id;
-    unsigned int pte[MAX_PAGES];
-    enum request_state type[MAX_PAGES];
+    int page_ref;
+    int offset;
+    enum req_type t;
+    struct lclock req_time;
+    struct lclock res_time;
 };
 
 struct send_pkt{
@@ -53,14 +72,23 @@ struct recv_pkt{
 
 struct page_table_entry {
     int frame_no;
-    int ref:1;
-    int dirty:1;
-    int present:1;
+    int ref;
+    int dirty;
+    int present;
+    int valid;
+    int size;
 };
 
 struct page_table{
     int pid;
     struct page_table_entry pte[MAX_PAGES];
+};
+
+struct stat {
+    double mem_access_count;
+    double speed;
+    int page_faults;
+    int seg_faults;
 };
 
 key_t lc_key = 1234;
