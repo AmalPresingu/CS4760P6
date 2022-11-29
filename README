@@ -11,9 +11,11 @@ HOW TO RUN
 
 COMMANDS 
 -------------------
-./oss 				Forks user process randomly between 1 and 5 seconds
-./oss -h			Prints usage
-./oss -v [0 | 1]	0 for non-verbose mode | 1 for verbose mode		
+./oss                   Runs with default processes
+./oss -h                Prints usage
+./oss -m 0              Runs 1st memory request scheme
+./oss -m 1              Runs 2nd memory request scheme
+./oss -p [n]            Set number of processes n	
 
 
 Version Control
@@ -23,8 +25,16 @@ GitHub Repo: https://github.com/AmalPresingu/CS4760P6
 
 ISSUES/CHANGES
 --------------
-- Currently runs with 20 max processes instead of 40. Was getting a "resource temporarily unavailable"
-  message when trying to create new processes. Should be working accordingly though. When I ran ulimit, my 
-  max user processes was set to 30. Not sure if this has anything to do with the issue. 
-  
-- Added -v parameter to toggle verbose on and off.
+- Currently runs with 20 max processes
+
+- Added parameters to select memory request scheme and set n number of processes
+
+- Alarm interrupt is set to go off after 10 seconds
+
+OBSERVATIONS
+--------------
+The first memory request scheme gives more page faults / memory access since it is randomly
+selecting the pages. 
+
+The second memory request scheme gives less page faults since it is accessing some pages
+for longer periods of time than the rest. 

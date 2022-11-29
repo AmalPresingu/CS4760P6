@@ -17,7 +17,7 @@
 #include <limits.h>
 
 #define MAX_PROCESSES 20
-#define HELP_STATEMENT "HOW TO USE: [-h -m -p]\n -h for help \n -m\t0 for 1st memory request scheme \n\t1 for 2nd memory request scheme\n-p\tSet the number of processes you want to run\n"
+#define HELP_STATEMENT "USAGE\n---------\n./oss                   Runs with default processes\n./oss -h                Prints usage\n./oss -m 0              Runs 1st memory request scheme\n./oss -m 1              Runs 2nd memory request scheme\n./oss -p [n]            Set number of processes n\n"
 #define MAX_PROCESS_IN_SYSTEM 18
 #define MAX_LINE_IN_LOG_FILE 40000
 #define TERMINATION_PROB 0.30
